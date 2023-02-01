@@ -1,0 +1,45 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background: #1e40af;
+	display: flex;
+	flex-direction: column;
+	gap: 50px 0;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	font-family: "Caveat", cursive;
+}
+
+.container {
+	background: #111827;
+	display: grid;
+	grid-template-columns: repeat(3, 150px);
+	grid-template-rows: repeat(3, 150px);
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+h1 {
+	font-size: 52px;
+}
+
+.box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 15px;
+	background: #ef4444;
+	border: 1px solid black;
+	font-size: 3rem;
+	font-weight: 700;
+	transition: all 0.3s ease;
+}
+
+.box:hover {
+	cursor: pointer;
+	background: #fbbf24;
+}
