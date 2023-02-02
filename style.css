@@ -8,7 +8,7 @@ body {
 	background: #1e40af;
 	display: flex;
 	flex-direction: column;
-	gap: 50px 0;
+	gap: 30px 0;
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
@@ -25,6 +25,18 @@ body {
 
 h1 {
 	font-size: 52px;
+	line-height: 1em;
+}
+
+.play {
+	padding: 10px;
+	background: #22c55e;
+	font-size: 24px;
+}
+
+.play:hover {
+	background: #44e37f;
+	cursor: pointer;
 }
 
 .box {

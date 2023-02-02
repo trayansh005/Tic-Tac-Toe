@@ -1,58 +1,79 @@
-const gameBoard = (() => {
-	const choice = [];
-	const container = document.querySelector(".container");
+const container = document.querySelector(".container");
+const boxes = container.querySelectorAll(".box");
+const winnerText = document.querySelector(".winner");
+const playRoundBtn = document.querySelector(".play");
 
+let choices = [];
+let startGame = true;
+
+const gameBoard = (() => {
 	const createBoard = () => {
-		for (let i = 0; i < 9; i++) {
-			const box = document.createElement("div");
-			box.classList.add("box");
-			container.appendChild(box);
-		}
+		choices = Array(9).fill("");
 	};
 
 	const playRound = (player1, player2) => {
-		let player1turn = 0;
-		let player2turn = 0;
-		const boxes = container.querySelectorAll(".box");
-		for (let i = 0; i < boxes.length; i++) {
-			const box = boxes[i];
+		let player1Turn = true;
+
+		boxes.forEach((box, i) => {
 			box.addEventListener("click", () => {
-				if (player1turn === 0 && box.innerHTML === "") {
-					box.innerHTML = player1.marker;
-					player1turn = 1;
-					player2turn = 0;
-					choice.push(box.innerHTML);
-					console.log(choice);
-					console.log(player1.name);
-				} else if (player2turn === 0 && box.innerHTML === "") {
-					box.innerHTML = player2.marker;
-					player2turn = 1;
-					player1turn = 0;
-					choice.push(box.innerHTML);
-					console.log(choice);
-					console.log(player2.name);
-				}
+				if (!startGame || box.innerHTML !== "") return;
+
+				let player = player1Turn ? player1 : player2;
+				box.innerHTML = player.marker;
+				player1Turn = !player1Turn;
+				choices[i] = player.marker;
+				checkWinner(player1, player2);
 			});
-		}
+		});
 	};
 
-	return { choice, createBoard, playRound };
+	return { createBoard, playRound };
 })();
 
-gameBoard.createBoard();
+const createPlayer = (name, marker) => ({
+	name,
+	marker,
+	sayName: () => console.log(`Player ${name}`),
+});
 
-function createPlayer(name, marker) {
-	return {
-		name: name,
-		marker: marker,
-		sayName() {
-			console.log(`Player ${name}`);
-		},
-	};
-}
+const player = createPlayer("Player", "X");
+const cpu = createPlayer("CPU", "O");
 
-const john = createPlayer("john", "X");
-const cpu = createPlayer("cpu", "O");
-john.sayName();
+const winningCombinations = [
+	[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	[0, 3, 6],
+	[1, 4, 7],
+	[2, 5, 8],
+	[0, 4, 8],
+	[2, 4, 6],
+];
 
-gameBoard.playRound(john, cpu);
+const checkWinner = (player1, player2) => {
+	for (let [a, b, c] of winningCombinations) {
+		if (choices[a] === player1.marker && choices[b] === player1.marker && choices[c] === player1.marker) {
+			winnerText.textContent = `${player1.name} wins!`;
+			startGame = false;
+			playRoundBtn.style.display = "block";
+			return;
+		} else if (choices[a] === player2.marker && choices[b] === player2.marker && choices[c] === player2.marker) {
+			winnerText.textContent = `${player2.name} wins!`;
+			startGame = false;
+			playRoundBtn.style.display = "block";
+			return;
+		}
+	}
+};
+
+const restartGame = () => {
+	choices = [];
+	boxes.forEach((box) => (box.innerHTML = ""));
+	startGame = true;
+	winnerText.textContent = "Tic-Tac-Toe";
+	gameBoard.createBoard();
+	playRoundBtn.style.display = "none";
+	gameBoard.playRound(player, cpu);
+};
+
+playRoundBtn.addEventListener("click", restartGame);
